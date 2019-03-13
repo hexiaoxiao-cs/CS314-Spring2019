@@ -1,10 +1,11 @@
 module Project2 where
 
 zero :: Int -> Int -> [[Double]]
-zero = undefined
+zero rows cols = take rows (repeat (take cols (repeat 0.0)))
 
 ident :: Int -> [[Double]]
-ident = undefined
+ident n = let
+		rows = 
 
 
 diag :: [[Double]] -> [Double]
