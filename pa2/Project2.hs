@@ -3,9 +3,11 @@ module Project2 where
 zero :: Int -> Int -> [[Double]]
 zero rows cols = take rows (repeat (take cols (repeat 0.0)))
 
+oneinplace :: Int -> Int -> [Double]
+oneinplace n r = take (r) (repeat 0) ++ [1] ++ take (n-r-1) (repeat 0) 
+
 ident :: Int -> [[Double]]
-ident n = let
-		rows = 
+ident n = map (oneinplace n) [0..n-1]
 
 
 diag :: [[Double]] -> [Double]
