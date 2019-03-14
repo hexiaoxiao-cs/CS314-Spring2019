@@ -4,7 +4,7 @@ zero :: Int -> Int -> [[Double]]
 zero rows cols = take rows (repeat (take cols (repeat 0.0)))
 
 oneinplace :: Int -> Int -> [Double]
-oneinplace n r = take (r) (repeat 0) ++ [1] ++ take (n-r-1) (repeat 0) 
+oneinplace n r = take (r) (repeat 0.0) ++ [1] ++ take (n-r-1) (repeat 0.0) 
 
 ident :: Int -> [[Double]]
 ident n = map (oneinplace n) [0..n-1]
@@ -29,12 +29,15 @@ transp matrix = (map head matrix) : (transp (map tail matrix))
 
 data Sparse = Sparse Int Int [(Int,[(Int,Double)])]
     deriving (Show, Eq)
-
+	
 sident :: Int -> Sparse
 sident n = Sparse n n (map (\x -> (x,[(x,1.0)])) [0..n-1])
 
+getdiag :: (Int, [(Int,Double)]) -> Double
+getdiag a = map 
+
 sdiag :: Sparse -> [Double]
-sdiag = undefined
+sdiag matrix = map getdiag matrix
 
 sadd :: Sparse -> Sparse -> Sparse
 sadd = undefined
