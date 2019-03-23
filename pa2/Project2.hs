@@ -33,11 +33,12 @@ data Sparse = Sparse Int Int [(Int,[(Int,Double)])]
 sident :: Int -> Sparse
 sident n = Sparse n n (map (\x -> (x,[(x,1.0)])) [0..n-1])
 
-getdiag :: (Int, [(Int,Double)]) -> Double
-getdiag a = map 
+getdiag :: Int -> (Int, [(Int,Double)]) -> [Double]
+getdiag x z = if filter (
 
 sdiag :: Sparse -> [Double]
-sdiag matrix = map getdiag matrix
+sdiag Sparse x y z= map (\k -> map (k,_) z) [0..(min x y)]
+getdiag (min x y) z
 
 sadd :: Sparse -> Sparse -> Sparse
 sadd = undefined
