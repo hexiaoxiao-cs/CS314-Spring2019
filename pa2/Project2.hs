@@ -29,16 +29,24 @@ transp matrix = (map head matrix) : (transp (map tail matrix))
 
 data Sparse = Sparse Int Int [(Int,[(Int,Double)])]
     deriving (Show, Eq)
-	
+
 sident :: Int -> Sparse
 sident n = Sparse n n (map (\x -> (x,[(x,1.0)])) [0..n-1])
 
-getdiag :: Int -> (Int, [(Int,Double)]) -> [Double]
-getdiag x z = if filter (
+getdiag :: Int -> [(Int,Double)] -> Double
+getdiag x z | (null z) = 0.0
+			| (fst (head z)) == x = snd (head z)
+			| otherwise = getdiag x (tail z)
+
+getdiag2 :: Int -> [(Int, [(Int,Double)])] -> [(Int,Double)]
+getdiag2 x z | (null z) = []
+			 | (fst (head z)) == x = snd (head z)
+			 | otherwise = getdiag2 x (tail z)
+
 
 sdiag :: Sparse -> [Double]
-sdiag Sparse x y z= map (\k -> map (k,_) z) [0..(min x y)]
-getdiag (min x y) z
+sdiag (Sparse x y z) = map (\k -> getdiag k (getdiag2 k z)) [0..(min x y)-1]
+
 
 sadd :: Sparse -> Sparse -> Sparse
 sadd = undefined
