@@ -1,4 +1,6 @@
 module Project2 where
+import Data.List (sort)
+--import Debug.Trace
 
 zero :: Int -> Int -> [[Double]]
 zero rows cols = take rows (repeat (take cols (repeat 0.0)))
@@ -47,6 +49,25 @@ getdiag2 x z | (null z) = []
 sdiag :: Sparse -> [Double]
 sdiag (Sparse x y z) = map (\k -> getdiag k (getdiag2 k z)) [0..(min x y)-1]
 
+lineadd :: Int ->[(Int,Double)] ->[(Int,Double)] -> [(Int,Double)]
+--lineadd counts l1 l2 | trace ("lineadd "++ show l1 ++ " " ++ show l2) False = undefined
+lineadd counts l1 l2 | (null l1) = l2
+					 | (null l2) = l1
+					 | (fst (head l1)) == (fst (head l2)) = [(fst (head l1), (snd (head l1) + snd (head l2)))] ++ lineadd counts (tail l1) (tail l2)
+					 | (fst (head l1)) > (fst (head l2)) = [(head l2)] ++ lineadd counts l1 (tail l2)
+					 | (fst (head l1)) < (fst (head l2)) = [(head l1)] ++ lineadd counts (tail l1) l2
+
+shrinkline :: [(Int,Double)] -> [(Int,Double)]
+shrinkline a | null a = []
+			 | (snd (head a))==0 = shrinkline (tail a)
+			 | otherwise = [(head a)] ++ shrinkline (tail a)
+
+shrinkwhole :: [(Int,[(Int,Double)])] -> [(Int,[(Int,Double)])]
+shrinkwhole a | null a = []
+			  | null (snd (head a)) = shrinkwhole (tail a)
+			  | otherwise = [(head a)] ++ shrinkwhole (tail a)
+
+
 
 sadd :: Sparse -> Sparse -> Sparse
-sadd = undefined
+sadd (Sparse a b c) (Sparse d e f) = Sparse (max a d) (max b e) (shrinkwhole (map (\k -> (k,(shrinkline(lineadd (max b e) (sort (getdiag2 k c)) (sort (getdiag2 k f)))))) [0..(max a d)-1]))
