@@ -37,13 +37,13 @@ sident n = Sparse n n (map (\x -> (x,[(x,1.0)])) [0..n-1])
 
 getdiag :: Int -> [(Int,Double)] -> Double
 getdiag x z | (null z) = 0.0
-			| (fst (head z)) == x = snd (head z)
-			| otherwise = getdiag x (tail z)
+            | (fst (head z)) == x = snd (head z)
+            | otherwise = getdiag x (tail z)
 
 getdiag2 :: Int -> [(Int, [(Int,Double)])] -> [(Int,Double)]
 getdiag2 x z | (null z) = []
-			 | (fst (head z)) == x = snd (head z)
-			 | otherwise = getdiag2 x (tail z)
+             | (fst (head z)) == x = snd (head z)
+             | otherwise = getdiag2 x (tail z)
 
 
 sdiag :: Sparse -> [Double]
@@ -52,20 +52,20 @@ sdiag (Sparse x y z) = map (\k -> getdiag k (getdiag2 k z)) [0..(min x y)-1]
 lineadd :: Int ->[(Int,Double)] ->[(Int,Double)] -> [(Int,Double)]
 --lineadd counts l1 l2 | trace ("lineadd "++ show l1 ++ " " ++ show l2) False = undefined
 lineadd counts l1 l2 | (null l1) = l2
-					 | (null l2) = l1
-					 | (fst (head l1)) == (fst (head l2)) = [(fst (head l1), (snd (head l1) + snd (head l2)))] ++ lineadd counts (tail l1) (tail l2)
-					 | (fst (head l1)) > (fst (head l2)) = [(head l2)] ++ lineadd counts l1 (tail l2)
-					 | (fst (head l1)) < (fst (head l2)) = [(head l1)] ++ lineadd counts (tail l1) l2
+                     | (null l2) = l1
+                     | (fst (head l1)) == (fst (head l2)) = [(fst (head l1), (snd (head l1) + snd (head l2)))] ++ lineadd counts (tail l1) (tail l2)
+                     | (fst (head l1)) > (fst (head l2)) = [(head l2)] ++ lineadd counts l1 (tail l2)
+                     | (fst (head l1)) < (fst (head l2)) = [(head l1)] ++ lineadd counts (tail l1) l2
 
 shrinkline :: [(Int,Double)] -> [(Int,Double)]
 shrinkline a | null a = []
-			 | (snd (head a))==0 = shrinkline (tail a)
-			 | otherwise = [(head a)] ++ shrinkline (tail a)
+             | (snd (head a))==0 = shrinkline (tail a)
+             | otherwise = [(head a)] ++ shrinkline (tail a)
 
 shrinkwhole :: [(Int,[(Int,Double)])] -> [(Int,[(Int,Double)])]
 shrinkwhole a | null a = []
-			  | null (snd (head a)) = shrinkwhole (tail a)
-			  | otherwise = [(head a)] ++ shrinkwhole (tail a)
+              | null (snd (head a)) = shrinkwhole (tail a)
+              | otherwise = [(head a)] ++ shrinkwhole (tail a)
 
 
 
